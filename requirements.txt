@@ -1,0 +1,4 @@
+fireplace2
+hslog
+hearthstone
+hsreplay
