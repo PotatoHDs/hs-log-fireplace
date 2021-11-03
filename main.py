@@ -18,21 +18,23 @@ pp = pp.pprint
 #     print(line)
 global g, fplayer, eplayer
 p = LogParser()
-system = platform.system()
-hs_path = None
-if system == 'Darwin':
-    hs_path = Path('/') / 'Applications' / 'Hearthstone' / 'Logs' / 'Power.log'
-elif system == 'Windows':
-    for Disk in ascii_uppercase:
-        hs_path = Path(f'{Disk}:\\') / 'Program Files (x86)' / 'Hearthstone' / 'Logs' / 'Power.log'
-        if hs_path.exists():
-            break
-elif system == 'Linux':
-    if 'Microsoft' in platform.release():
-        for Disk in ascii_lowercase:
-            hs_path = Path('/') / 'mnt' / Disk / 'Program Files (x86)' / 'Hearthstone' / 'Logs' / 'Power.log'
-            if hs_path.exists():
-                break
+# system = platform.system()
+# hs_path = None
+# if system == 'Darwin':
+#     hs_path = Path('/') / 'Applications' / 'Hearthstone' / 'Logs' / 'Power.log'
+# elif system == 'Windows':
+#     for Disk in ascii_uppercase:
+#         hs_path = Path(f'{Disk}:\\') / 'Program Files (x86)' / 'Hearthstone' / 'Logs' / 'Power.log'
+#         if hs_path.exists():
+#             break
+# elif system == 'Linux':
+#     if 'Microsoft' in platform.release():
+#         for Disk in ascii_lowercase:
+#             hs_path = Path('/') / 'mnt' / Disk / 'Program Files (x86)' / 'Hearthstone' / 'Logs' / 'Power.log'
+#             if hs_path.exists():
+#                 break
+
+hs_path = Path(r'C:\Users\kmv026\Documents\GitHub\hs-log-fireplace\Power.log')
 
 
 def reload():
@@ -51,7 +53,7 @@ def get_hand_events(player):
     for e in g.entities:
         # print(e.zone == Zone.HAND, str(e.controller))
         if e.zone == Zone.HAND and e.tags[GameTag.CONTROLLER] == player.player_id:
-            print()
+            ...
             # print(f"ACTION FROM HAND: {e} {e.__dict__.keys()} {e._initial_controller} {e.initial_creator} {e.tags}")
 
 
@@ -68,7 +70,8 @@ def get_amount_minions(player):
 def get_heropower_active(player):
     for e in g.entities:
         if e.zone == Zone.PLAY and e.type == CardType.HERO_POWER and e.tags[GameTag.CONTROLLER] == player.player_id:
-            print(e.__dict__)
+            # print(e.__dict__)
+            ...
             # return True if e.tags[GameTag.EXHAUSTED] == 0 else False
 
 
@@ -82,11 +85,14 @@ def main():
         get_amount_minions(fplayer)
         # for key, value in p.games[-1].export().__dict__.items():
         #     print(key, value)
-        exporter = EntityTreeExporter(p.games[-1])
-        what = exporter.export()
-
-        # print(p.games[-1].__dict__)
-        print(fplayer.__dict__)
+        # exporter = EntityTreeExporter(p.games[-1])
+        # what = exporter.export()
+        print(p.games[-1].export())
+        # for packet in p.games[-1].packets:
+        #     print(vars(packet))
+        #     print()
+        # print(vars(fplayer))
+        # print(vars(what))
         # print(export)
         # for key, value in g.players[0].__dict__.items():
         #     print(key, value, sep=':')

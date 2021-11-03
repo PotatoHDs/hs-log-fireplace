@@ -1,7 +1,8 @@
 from hsreplay.document import HSReplayDocument
 import json
 import os
-from io import StringIO, BytesIO
+from io import BytesIO
+from hslog.export import EntityTreeExporter
 
 
 def get_file_paths(path):
@@ -18,7 +19,7 @@ def get_games(games_dir):
     for filename in get_file_paths(games_dir):
         with open(filename) as f:
             game = json.load(f)
-            game['game'] = HSReplayDocument.from_xml_file(BytesIO(game['xml'].encode("utf-8"))).games[0]
+            game['game'] = HSReplayDocument.from_xml_file(BytesIO(game['xml'].encode("utf-8")))
             del game['xml']
             game['id'] = os.path.basename(filename).split('.')[0]
             yield game
@@ -38,8 +39,25 @@ def get_games_dict(games_dir):
 
 
 def main():
-    for data in get_games(r'C:\Users\kmv026\Documents\GitHub\hs-log-fireplace\example data'):
-        print(data)
+    game = next(get_games(r'D:\datasets and shit\hs_games'))
+    # print(game['game'].nodes)
+    # print('\n\n\n')
+
+    # packet_tree = game['game'].to_packet_tree()
+    # p = LogParser()
+    game = game['game'].to_packet_tree()[0]
+    # p.
+    print(game.export())
+    # for node in game['game'].nodes:
+    #     print(vars(node))
+    #     print()
+    # print([vars(node) for node in game['game'].nodes])
+    # print(game)
+    # print(game)
+    # games = list(get_games(r'C:\Users\kmv026\Documents\GitHub\hs-log-fireplace\example data'))
+    # game = games[0]
+    # print(vars(game['game']))
+    # print(vars(game['game'].nodes[0].nodes[0]))
 
 
 if __name__ == '__main__':
