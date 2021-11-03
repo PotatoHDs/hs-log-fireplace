@@ -1,10 +1,11 @@
 import time
 
-FILEPATH = "./log.txt"
+from hslog import LogParser
+
+FILEPATH = "test.log"
 
 
 def check_for_update(filepath):
-    n = 0
     with open(filepath, "r") as file:
         while True:
             time.sleep(0.1)
@@ -20,4 +21,14 @@ def fun_to_exec(data):
 
 
 if __name__ == '__main__':
-    check_for_update(FILEPATH)
+    # check_for_update(FILEPATH)
+    p = LogParser()
+    with open(FILEPATH, "r") as file:
+        while True:
+            time.sleep(0.1)
+            lines = file.readlines()
+            if lines:
+                for line in lines:
+                    if line != '\n':
+                        p.read_line(line)
+                print(p.games[-1].export().game)
