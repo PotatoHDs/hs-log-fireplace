@@ -1,5 +1,10 @@
 import pprint
+import random
 
+from fireplace import cards
+from fireplace.game import Game
+from fireplace.player import Player
+from fireplace.utils import random_draft
 from hslog import LogParser
 
 from hslog.export import EntityTreeExporter, FriendlyPlayerExporter
@@ -8,7 +13,7 @@ import platform
 from pathlib import Path
 from string import ascii_uppercase, ascii_lowercase
 
-from hearthstone.enums import CardType, GameTag, Zone
+from hearthstone.enums import CardType, GameTag, Zone, CardClass
 
 pp = pprint.PrettyPrinter(depth=6)
 pp = pp.pprint
@@ -34,7 +39,7 @@ p = LogParser()
 #             if hs_path.exists():
 #                 break
 
-hs_path = Path(r'C:\Users\kmv026\Documents\GitHub\hs-log-fireplace\Power.log')
+hs_path = Path(r'C:\Users\PotatoHD\Documents\GitHub\hs-log-fireplace\Power.log')
 
 
 def reload():
@@ -75,7 +80,30 @@ def get_heropower_active(player):
             # return True if e.tags[GameTag.EXHAUSTED] == 0 else False
 
 
+class Decoder:
+    def __init__(self):
+        self.arr = []
+
+    def push(self, el):
+        self.arr.append(el)
+
+    pass
+
+
 def main():
+    cards.db.initialize()
+
+    c1 = CardClass(random.randint(2, 10))
+    c2 = CardClass(random.randint(2, 10))
+    deck1 = random_draft(c1)
+    deck2 = random_draft(c2)
+
+    players = []
+    players.append(Player("Player1", deck1, c1.default_hero))
+    players.append(Player("Player2", deck2, c2.default_hero))
+    game1 = Game(players=players)
+    game1.start()
+    print(game1.tags)
     if hs_path is not None and hs_path.exists():
         reload()
         # print(fplayer.player_id)
@@ -87,7 +115,8 @@ def main():
         #     print(key, value)
         # exporter = EntityTreeExporter(p.games[-1])
         # what = exporter.export()
-        print(p.games[-1].export())
+        game = p.games[-1].export()
+        print(game)
         # for packet in p.games[-1].packets:
         #     print(vars(packet))
         #     print()
